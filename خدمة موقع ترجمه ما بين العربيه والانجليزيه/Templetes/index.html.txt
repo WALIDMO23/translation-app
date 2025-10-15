@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مترجم النصوص</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="translator-card">
+      <h2>🌙 مترجم النصوص</h2>
+      <form method="POST">
+        <div class="mb-3">
+          <label for="text" class="form-label">اكتب النص هنا:</label>
+          <textarea class="form-control" name="text" id="text" rows="6" placeholder="أدخل النص المراد ترجمته">{{ input_text }}</textarea>
+        </div>
+        <div class="row g-2">
+          <div class="col-8">
+            <label for="lang" class="form-label">اختر اللغة:</label>
+            <select class="form-select" name="lang" id="lang">
+              <option value="en" {% if selected_lang == 'en' %}selected{% endif %}>إلى الإنجليزية</option>
+              <option value="ar" {% if selected_lang == 'ar' %}selected{% endif %}>إلى العربية</option>
+            </select>
+          </div>
+          <div class="col-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-custom w-100">ترجم الآن</button>
+          </div>
+        </div>
+      </form>
+
+      {% if result %}
+      <div class="result-box mt-4">
+        <strong>النتيجة:</strong>
+        <p>{{ result }}</p>
+      </div>
+      {% endif %}
+    </div>
+    <footer class="text-center text-muted mt-4">مبني بـ Flask • للمساعدة راسل المطوّر</footer>
+  </div>
+</body>
+</html>

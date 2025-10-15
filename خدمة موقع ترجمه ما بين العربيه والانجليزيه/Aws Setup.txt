@@ -1,0 +1,38 @@
+رفع على AWS EC2 — 
+
+أنشئ EC2 instance (Amazon Linux 2023 أو Ubuntu) مع key pair.
+
+SSH إلى الـ instance:
+
+ssh -i mykey.pem ec2-user@<PUBLIC_IP>
+
+
+انسخ الملفات من جهازك إلى الـ instance (مثلاً باستخدام scp أو git clone):
+
+scp -i mykey.pem -r ~/translator ec2-user@<PUBLIC_IP>:/home/ec2-user/
+
+
+أو استخدم Git:
+
+git clone <your-repo-url> translator
+
+
+نفّذ خطوات إعداد virtualenv و Gunicorn و Nginx كما في الأعلى.
+
+أضف اسم الدومين (A record) إلى IP ثم ثبّت شهادة SSL (Certbot) إن رغبت.
+
+ملاحظة مهمة حول الترجمة
+
+المشروع يستخدم مكتبة googletrans (غير رسمية). قد تتعرض لقيود أو انقطاع. للاستخدام الإنتاجي المستقر يُنصح باستخدام:
+
+Google Cloud Translate API (مدفوع) أو
+
+حلول مدفوعة أخرى مثل OpenAI أو مزودي ترجمة موثوقين.
+
+استكشاف المشاكل الشائعة
+
+إذا ظهر خطأ أثناء الترجمة: تحقق من اتصال الإنترنت و/أو استبدل مزود الترجمة.
+
+إذا لم يعمل Gunicorn: راجع صلاحيات الملفات ومسار الـ virtualenv في ملف systemd.
+
+إذا Nginx يعيد 502: تحقق أن الـ socket موجود وأن خدمة translator تعمل.

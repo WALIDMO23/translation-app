@@ -1,0 +1,33 @@
+from flask import Flask, render_template, request
+from googletrans import Translator
+
+app = Flask(__name__)
+translator = Translator()
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    translated_text = None
+    input_text = ""
+    selected_lang = "en"
+
+    if request.method == "POST":
+        input_text = request.form.get("text", "").strip()
+        selected_lang = request.form.get("lang", "en")
+
+        if input_text:
+            try:
+                translated = translator.translate(input_text, dest=selected_lang)
+                translated_text = translated.text
+            except Exception as e:
+                translated_text = f"⚠️ حدث خطأ أثناء الترجمة: {str(e)}"
+        else:
+            translated_text = "⚠️ من فضلك أدخل نصًا للترجمة."
+
+    return render_template("index.html",
+                           result=translated_text,
+                           input_text=input_text,
+                           selected_lang=selected_lang)
+
+if __name__ == "__main__":
+    # تشغيل على جميع الواجهات مناسب للتجربة على EC2. في الإنتاج سنستخدم Gunicorn.
+    app.run(host="0.0.0.0", port=5000)
